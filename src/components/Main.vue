@@ -16,15 +16,21 @@
           </div>
         </swiper>
       </div>
-      <div class="each-column form-column">
+      <div class="each-column form-column" v-if="!isLogin">
         <div class="hold-login el-card">
-          <el-form ref="form" :model="form" label-width="80px" label-position="top">
-            <el-form-item label="用户名">
+          <el-form ref="form" :model="form" label-width="80px" label-position="top" :rules="rules">
+            <el-form-item label="用户名" prop="name">
               <el-input v-model="form.name" placeholder="请输入用户名"></el-input>
             </el-form-item>
-            <el-form-item label="密码">
+            <el-form-item label="密码" prop="pwd">
               <el-input v-model="form.pwd" placeholder="请输入密码"></el-input>
             </el-form-item>
+            <div role="alert" class="el-alert el-alert--error" style="margin-bottom:22px" v-if="hasError">
+              <i class="el-alert__icon el-icon-error"></i>
+              <div class="el-alert__content">
+                <span class="el-alert__title">{{errorMsg}}</span>
+              </div>
+            </div>
             <el-form-item>
               <div class="wrap-login-button">
                 <el-button type="primary" @click="onSubmit">登入</el-button>
@@ -106,13 +112,24 @@
   </div>
 </template>
 <script>
+// import Vue from 'vue'
+// import axios from "axios";
+var axios = require("axios");
+// Vue.prototype.$http = axios
 export default {
   name: "mainContent",
   data() {
     return {
+      isLogin: false,
+      hasError: false,
+      errorMsg: "",
       form: {
         name: "",
         pwd: ""
+      },
+      rules: {
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        pwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
       banners: [
         "http://www.visvn.cn/templates/index/def/images/slider_1.jpg",
@@ -128,9 +145,50 @@ export default {
       //   swiperSlides: [1, 2, 3,]
     };
   },
+  created() {
+    axios({
+      method: "post",
+      url: "/Account/GetInfo"
+    }).then(resp => {
+      var data = resp.data;
+      if (data.userName.trim() == "") {
+        this.isLogin = false;
+      } else {
+        this.isLogin = true;
+      }
+    });
+  },
   methods: {
     onSubmit() {
-      console.log(111111111);
+      this.$refs.form.validate(validate => {
+        if (validate) {
+          axios({
+            method: "post",
+            url: "/Account/Login",
+            data: {
+              UserName: this.form.name,
+              Password: this.form.pwd
+            }
+          }).then(resp => {
+            var data = resp.data;
+            if (data.code == 0) {
+              this.errorMsg = "";
+              this.hasError = false;
+              this.isLogin = true;
+              window.location.href = "/static/backstage.html";
+            } else {
+              this.errorMsg = data.msg;
+              this.hasError = true;
+              this.form.pwd = "";
+              this.$refs.form.validate(validate => {
+                return false;
+              });
+            }
+          });
+        } else {
+          return false;
+        }
+      });
     }
   },
   computed: {

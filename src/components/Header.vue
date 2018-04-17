@@ -2,8 +2,8 @@
     <nav class="navbar is-fixed-top is-black">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="#">
-                    <img src="../assets/logo-small.png" class="logo"/>
+                <a class="navbar-item wrap-logo" href="#">
+                    <img src="../assets/logo-small.png" class="logo" />
                 </a>
                 <!-- <el-menu class="el-menu-demo" mode="horizontal" background-color="black">
                     <el-menu-item index="1">处理中心</el-menu-item>
@@ -28,13 +28,13 @@
                 </div>
             </div>
             <div id="navMenu" class="navbar-menu" @click="closeMenu">
-                <div class="navbar-start" >
-                    <router-link tag="span" to=advertiser class=nav-span >
-                        <a class="navbar-item t-item drop-down-a t-flag" href="#" name="advertiser" >
+                <div class="navbar-start">
+                    <router-link tag="span" to=advertiser class=nav-span>
+                        <a class="navbar-item t-item drop-down-a t-flag" href="#" name="advertiser">
                             广告商
                         </a>
                     </router-link>
-                    <router-link tag="span" to=affiliate class="nav-span" >
+                    <router-link tag="span" to=affiliate class="nav-span">
                         <a class="navbar-item t-item drop-down-a t-flag" href="#" name=affiliate>
                             网站主
                         </a>
@@ -42,11 +42,15 @@
                 </div>
                 <div class="navbar-end">
                     <div class="navbar-item">
-                        <el-button type="text" >
+                        <el-button type="text" v-if="!isLogin">
                             <router-link tag="span" to="login" class="t-flag">登入</router-link>
                         </el-button>
-                        <el-button type="text" to="register">
+                        <el-button type="text" to="register" v-if="!isLogin">
                             <router-link tag="span" to="register" class="t-flag">注册</router-link>
+                        </el-button>
+                        <el-button type="text" to="register" v-if="isLogin">
+                            <span @click="goBackstage">选择广告</span>
+                            <!-- span </router-link> -->
                         </el-button>
                     </div>
                 </div>
@@ -56,9 +60,26 @@
 </template>
 <script>
 import bus from "@/bus";
+import axios from "axios";
 export default {
   name: "pageheader",
+  data() {
+    return {
+      //   /Account/Login
+      isLogin:false 
+    };
+  },
   created() {
+    axios({
+      url: "/Account/GetInfo"
+    }).then(resp => {
+      var data = resp.data;
+      if (data.userName.trim() == "") {
+        this.isLogin = false;
+      } else {
+        this.isLogin = true;
+      }
+    });
     bus.$on("activeTab", tab => {
       var items = document.querySelectorAll(".t-item");
       for (var item of items) {
@@ -71,14 +92,20 @@ export default {
       //     console.log(items);
       //   console.log(tab);
     });
+    bus.$on('userLogin',msg=>{
+        this.isLogin = true;
+    })
   },
   methods: {
+    goBackstage() {
+      window.location.href = "/static/backstage.html";
+    },
     closeMenu(e) {
-        var flag = e.target.classList.contains('t-flag');
-        console.log(e.target);
-        if(flag){
-            document.querySelector('.navbar-burger').click();
-        }
+      var flag = e.target.classList.contains("t-flag");
+      // console.log(e.target);
+      if (flag) {
+        document.querySelector(".navbar-burger").click();
+      }
     }
   },
   mounted() {
@@ -110,8 +137,12 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.wrap-logo{
+    padding: 0px;
+}
 .logo {
-  height: 250px;
+  height: 56px;
+  max-height: 56px !important;
 }
 .current-tab {
   background-color: red;

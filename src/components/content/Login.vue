@@ -1,26 +1,36 @@
 <template>
-    <div class="login">
-        <el-card>
-            <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-                <el-form-item label="用户名" prop="name">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="pwd">
-                    <el-input v-model="form.pwd"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <div class="wrap-button">
-                        <el-button type="primary" @click="onSubmit">登入</el-button>
-                    </div>
-                </el-form-item>
-            </el-form>
-        </el-card>
-    </div>
+  <div class="login">
+    <el-card>
+      <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pwd">
+          <el-input v-model="form.pwd"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div class="wrap-button">
+            <el-button type="primary" @click="onSubmit">登入</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div role="alert" class="el-alert el-alert--error" style="margin-bottom:22px" v-if="hasError">
+        <i class="el-alert__icon el-icon-error"></i>
+        <div class="el-alert__content">
+          <span class="el-alert__title">{{errorMsg}}</span>
+        </div>
+      </div>
+    </el-card>
+  </div>
 </template>
 <script>
+import axios from "axios";
+import bus from "@/bus";
 export default {
   data() {
     return {
+      hasError: false,
+      errorMsg: "",
       form: {
         pwd: "",
         name: ""
@@ -34,10 +44,32 @@ export default {
   methods: {
     onSubmit() {
       this.$refs.form.validate(validate => {
-          if(validate){
-          }else{
-              return false;
-          }
+        if (validate) {
+          axios({
+            method: "post",
+            url: "/Account/Login",
+            data: {
+              UserName: this.form.name,
+              Password: this.form.pwd
+            }
+          }).then(resp => {
+            var data = resp.data;
+            if (data.code == 0) {
+              this.errorMsg = "";
+              this.hasError = false;
+              window.location.href = "/static/backstage.html";
+            } else {
+              this.errorMsg = data.msg;
+              this.hasError = true;
+              this.form.pwd = "";
+              this.$refs.form.validate(validate => {
+                return false;
+              });
+            }
+          });
+        } else {
+          return false;
+        }
       });
     }
   }

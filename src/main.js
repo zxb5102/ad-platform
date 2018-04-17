@@ -7,7 +7,6 @@ import router from './router'
 Vue.config.productionTip = false
 
 
-//import buefy
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 Vue.use(Buefy)
@@ -21,6 +20,11 @@ Vue.use(VueAwesomeSwiper, /* { default global options } */)
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+
+// import './mock/mock'
+
+// import axios from 'axios'
+// Vue.prototype.$http = axios
 
 import "./main.css"
 /* eslint-disable no-new */

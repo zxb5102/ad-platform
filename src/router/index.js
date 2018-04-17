@@ -52,6 +52,7 @@ var router = new Router({
   ]
 });
 router.afterEach((to, from) => {
+  // console.log(from);
   bus.$emit('activeTab',to);
 })
 export default router;
