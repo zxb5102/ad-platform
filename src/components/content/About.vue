@@ -29,10 +29,10 @@
                         <div class="left">公司名称：</div>
                         <div class="right">中航长江建设工程有限公司</div>
                     </div>
-                    <div class="list-info">
+                    <!-- <div class="list-info">
                         <div class="left">公司电话：</div>
                         <div class="right">123456789</div>
-                    </div>
+                    </div> -->
                     <div class="list-info">
                         <div class="left">公司地址：</div>
                         <div class="right">江西省南昌市青云谱区洪都生活五区长江装饰楼</div>

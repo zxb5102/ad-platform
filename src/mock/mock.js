@@ -3,6 +3,9 @@ var Mock = require('mockjs')
 Mock.mock('/Account/GetInfo',{
     userName:'11'
 })
+Mock.mock('/Account/LogOff',{
+    code:0
+});
 Mock.mock('/Account/Login',{
     code:0,
     msg:"输入的用户名或密码不正确"

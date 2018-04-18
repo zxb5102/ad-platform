@@ -6,7 +6,7 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
-          <el-input v-model="form.pwd"></el-input>
+          <el-input v-model="form.pwd" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="wrap-button">

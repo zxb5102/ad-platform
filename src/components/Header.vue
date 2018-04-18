@@ -1,62 +1,64 @@
 <template>
-    <nav class="navbar is-fixed-top is-black">
-        <div class="container">
-            <div class="navbar-brand">
-                <a class="navbar-item wrap-logo" href="#">
-                    <img src="../assets/logo-small.png" class="logo" />
-                </a>
-                <!-- <el-menu class="el-menu-demo" mode="horizontal" background-color="black">
+  <nav class="navbar is-fixed-top is-black">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item wrap-logo" href="#">
+          <img src="../assets/logo-small.png" class="logo" />
+        </a>
+        <!-- <el-menu class="el-menu-demo" mode="horizontal" background-color="black">
                     <el-menu-item index="1">处理中心</el-menu-item>
                     <el-menu-item index="2">处理中心</el-menu-item>
                 </el-menu> -->
-                <router-link tag="span" to=main class="nav-span">
-                    <a class="navbar-item t-item" href="#" name="main">
-                        <span style="color:white">首页</span>
-                    </a>
-                </router-link>
-                <router-link tag="span" to=about class=nav-span>
-                    <a class="navbar-item t-item" href="#" name="about">
-                        <span style="color:white">
-                            关于我们
-                        </span>
-                    </a>
-                </router-link>
-                <div class="navbar-burger" data-target="navMenu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div id="navMenu" class="navbar-menu" @click="closeMenu">
-                <div class="navbar-start">
-                    <router-link tag="span" to=advertiser class=nav-span>
-                        <a class="navbar-item t-item drop-down-a t-flag" href="#" name="advertiser">
-                            广告商
-                        </a>
-                    </router-link>
-                    <router-link tag="span" to=affiliate class="nav-span">
-                        <a class="navbar-item t-item drop-down-a t-flag" href="#" name=affiliate>
-                            网站主
-                        </a>
-                    </router-link>
-                </div>
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <el-button type="text" v-if="!isLogin">
-                            <router-link tag="span" to="login" class="t-flag">登入</router-link>
-                        </el-button>
-                        <el-button type="text" to="register" v-if="!isLogin">
-                            <router-link tag="span" to="register" class="t-flag">注册</router-link>
-                        </el-button>
-                        <el-button type="text" to="register" v-if="isLogin">
-                            <span @click="goBackstage">选择广告</span>
-                            <!-- span </router-link> -->
-                        </el-button>
-                    </div>
-                </div>
-            </div>
+        <router-link tag="span" to=main class="nav-span">
+          <a class="navbar-item t-item" href="#" name="main">
+            <span style="color:white">首页</span>
+          </a>
+        </router-link>
+        <router-link tag="span" to=about class=nav-span>
+          <a class="navbar-item t-item" href="#" name="about">
+            <span style="color:white">
+              关于我们
+            </span>
+          </a>
+        </router-link>
+        <div class="navbar-burger" data-target="navMenu">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-    </nav>
+      </div>
+      <div id="navMenu" class="navbar-menu" @click="closeMenu">
+        <div class="navbar-start">
+          <router-link tag="span" to=advertiser class=nav-span>
+            <a class="navbar-item t-item drop-down-a t-flag" href="#" name="advertiser">
+              广告商
+            </a>
+          </router-link>
+          <router-link tag="span" to=affiliate class="nav-span">
+            <a class="navbar-item t-item drop-down-a t-flag" href="#" name=affiliate>
+              网站主
+            </a>
+          </router-link>
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <el-button type="text" v-if="!isLogin">
+              <router-link tag="span" to="login" class="t-flag">登入</router-link>
+            </el-button>
+            <el-button type="text" v-if="!isLogin">
+              <router-link tag="span" to="register" class="t-flag">注册</router-link>
+            </el-button>
+            <el-button type="text" v-if="isLogin" @click="goBackstage">
+              <span>进入后台</span>
+            </el-button>
+            <el-button type="text" v-if="isLogin" @click="logOut">
+              <span>注销</span>
+            </el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 </template>
 <script>
 import bus from "@/bus";
@@ -66,7 +68,7 @@ export default {
   data() {
     return {
       //   /Account/Login
-      isLogin:false 
+      isLogin: false
     };
   },
   created() {
@@ -74,7 +76,7 @@ export default {
       url: "/Account/GetInfo"
     }).then(resp => {
       var data = resp.data;
-      if (data.userName.trim() == "") {
+      if (!data.userName) {
         this.isLogin = false;
       } else {
         this.isLogin = true;
@@ -92,11 +94,20 @@ export default {
       //     console.log(items);
       //   console.log(tab);
     });
-    bus.$on('userLogin',msg=>{
-        this.isLogin = true;
-    })
+    bus.$on("userLogin", msg => {
+      this.isLogin = true;
+    });
   },
   methods: {
+    logOut() {
+      axios({
+        method: "post",
+        url: "/Account/LogOff"
+      }).then(resp => {
+        this.isLogin = false;
+        bus.$emit("logOut");
+      });
+    },
     goBackstage() {
       window.location.href = "/static/backstage.html";
     },
@@ -137,8 +148,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.wrap-logo{
-    padding: 0px;
+.wrap-logo {
+  padding: 0px;
 }
 .logo {
   height: 56px;

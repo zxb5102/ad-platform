@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <el-card>
-      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="100px" :rules="rules" v-if="!isSuccess">
         <el-form-item label="用户名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
@@ -42,6 +42,12 @@
         </div>
         <!-- <div class="wrap-protocol" style="display:none">{{protocol}}</div> -->
       </el-form>
+      <div v-if="isSuccess" style="text-align:center">
+        <svg t="1524018929317" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1047" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+          <path d="M512.564498 13.54796c-276.60419 0-500.710033 224.105843-500.710033 500.710033s224.105843 500.710033 500.710033 500.710033 500.145535-224.105843 500.145535-500.710033S788.60419 13.54796 512.564498 13.54796zM789.168688 447.647189C632.802646 536.837927 476.436604 790.297685 476.436604 790.297685c-134.350606-164.269019-241.040794-197.574421-241.040794-197.574421l134.350606-77.900772c63.223815 60.401323 106.690187 103.867696 106.690187 103.867696 176.123484-336.441014 312.732084-379.907387 312.732084-379.907387L789.168688 447.647189z" p-id="1048" fill="#0ec469"></path>
+        </svg>
+        <p>注册成功</p>
+      </div>
     </el-card>
   </div>
 </template>
@@ -60,7 +66,32 @@ export default {
         callback();
       }
     };
+    function validateName(rule, value, callback) {
+      var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+      value = value.trim();
+      if (value === "") {
+        callback(new Error("请输入用户名"));
+      } else if (reg.test(value)) {
+        callback(new Error("用户名不能含有中文"));
+      } else {
+        // if (this.ruleForm2.checkPass !== "") {
+        //   this.$refs.ruleForm2.validateField("checkPass");
+        // }
+        callback();
+      }
+    }
+    // function  => {
+    //     if (value === '') {
+    //       callback(new Error('请输入密码'));
+    //     } else {
+    //       if (this.ruleForm2.checkPass !== '') {
+    //         this.$refs.ruleForm2.validateField('checkPass');
+    //       }
+    //       callback();
+    //     }
+    //   };
     return {
+      isSuccess: false,
       hasError: false,
       errorMsg: "",
       protocol: testData.protocol,
@@ -93,13 +124,15 @@ export default {
           {
             required: true,
             message: "请输入用户名"
-          }
+          },
+          { validator: validateName, trigger: "blur" }
         ],
         pwd: [
           {
             required: true,
             message: "请输入密码"
-          }
+          },
+          { min: 6, message: "密码至少需要6个字符", trigger: "blur" }
         ],
         pwd2: [
           {
@@ -155,6 +188,7 @@ export default {
         if (valid) {
           axios({
             url: "/Account/Register",
+            method: "post",
             data: {
               UserName: this.form.name,
               Password: this.form.pwd,
@@ -169,6 +203,7 @@ export default {
             if (data.code == 0) {
               this.errorMsg = "";
               this.hasError = false;
+              this.isSuccess = true;
               //success
             } else {
               this.errorMsg = data.msg;

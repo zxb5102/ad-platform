@@ -23,7 +23,7 @@
               <el-input v-model="form.name" placeholder="请输入用户名"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="pwd">
-              <el-input v-model="form.pwd" placeholder="请输入密码"></el-input>
+              <el-input v-model="form.pwd" placeholder="请输入密码" type="password"></el-input>
             </el-form-item>
             <div role="alert" class="el-alert el-alert--error" style="margin-bottom:22px" v-if="hasError">
               <i class="el-alert__icon el-icon-error"></i>
@@ -112,6 +112,7 @@
   </div>
 </template>
 <script>
+import bus from "@/bus";
 // import Vue from 'vue'
 // import axios from "axios";
 var axios = require("axios");
@@ -146,12 +147,15 @@ export default {
     };
   },
   created() {
+    bus.$on('logOut',()=>{
+      this.isLogin = false; 
+    });
     axios({
       method: "post",
       url: "/Account/GetInfo"
     }).then(resp => {
       var data = resp.data;
-      if (data.userName.trim() == "") {
+      if (!data.userName) {
         this.isLogin = false;
       } else {
         this.isLogin = true;
