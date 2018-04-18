@@ -4,17 +4,18 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
 
 
-module.exports = {
+
+const webpackConfig = {
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js',
-    babel:'babel-polyfill',
+    babel: 'babel-polyfill',
   },
   output: {
     path: config.build.assetsRoot,
@@ -81,3 +82,6 @@ module.exports = {
     child_process: 'empty'
   }
 }
+const vuxLoader = require('vux-loader')
+const vuxConfig = require('./vux-config')
+module.exports = vuxLoader.merge(webpackConfig, vuxConfig)
