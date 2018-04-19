@@ -21,7 +21,6 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
-var a = 'zzxxbb'
 
 
 //这里为动态导入的测试数据 生产模式下自动移除测试数据

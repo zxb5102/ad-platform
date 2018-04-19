@@ -1,7 +1,7 @@
 var Mock = require('mockjs')
 
 Mock.mock('/Account/GetInfo',{
-    userName:'11'
+    userName:''
 })
 Mock.mock('/Account/LogOff',{
     code:0

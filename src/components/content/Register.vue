@@ -27,7 +27,7 @@
           <el-input v-model="form.bankAccountName"></el-input>
         </el-form-item>
         <el-form-item label="收款账号" prop="bankAccountId">
-          <el-input v-model="form.bankAccountId"></el-input>
+          <el-input v-model="form.bankAccountId" @keyup.enter.native="onSubmit"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="wrap-button">

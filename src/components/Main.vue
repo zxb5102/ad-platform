@@ -1,5 +1,6 @@
 <template>
   <div class="mainContent">
+    <!-- <input type="text" @keyup.enter="onSubmit"> -->
     <div class="top-swiper">
       <!-- <div class="wrap-column"> -->
       <div class="each-column slide-column">
@@ -23,7 +24,7 @@
               <el-input v-model="form.name" placeholder="请输入用户名"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="pwd">
-              <el-input v-model="form.pwd" placeholder="请输入密码" type="password"></el-input>
+              <el-input v-model="form.pwd" placeholder="请输入密码" type="password"  @keyup.enter.native="onSubmit"></el-input>
             </el-form-item>
             <div role="alert" class="el-alert el-alert--error" style="margin-bottom:22px" v-if="hasError">
               <i class="el-alert__icon el-icon-error"></i>
