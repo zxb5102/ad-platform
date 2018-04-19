@@ -7,6 +7,18 @@
 // const argv = require('yargs').argv
 // argv.simulate = argv.simulate || false
 
+function getElement(){
+    var reqs = ['button','form-item','form','input','select','option','card'];
+    var result = "";
+    for(var item of reqs){
+        var itemOrigin = item;
+        if(item == 'form-item'){
+            item = 'formItem';
+        }
+        result += "import 'element-ui/lib/theme-chalk/"+itemOrigin+".css';import "+item+" from 'element-ui/lib/"+itemOrigin+"';Vue.component("+item+".name,"+item+");";
+    }
+    return result;
+}
 module.exports = {
     //   options: {
     //     vuxDev: !argv.simulate, // true
@@ -31,6 +43,7 @@ module.exports = {
                     ? "" 
                     : "import './mock/mock'"
                 var result = source.replace("'@mock'", replaceStr);
+                result = result.replace("'@ElementUI'",getElement());
                 return result;
             }
         },
