@@ -15,6 +15,8 @@ Vue.config.productionTip = false
 // C:\git-resp\ad-platform\node_modules\bulma\sass\components
 // Vue.use(Buefy)
 import 'bulma/css/bulma.css'
+import 'element-ui/lib/theme-chalk/icon.css';
+// C:\git-resp\ad-platform\node_modules\element-ui\lib\theme-chalk
 
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'

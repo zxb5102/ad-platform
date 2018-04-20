@@ -7,11 +7,11 @@ Mock.mock('/Account/LogOff',{
     code:0
 });
 Mock.mock('/Account/Login',{
-    code:0,
+    code:1,
     msg:"输入的用户名或密码不正确"
 })
 Mock.mock('/Account/Register',{
-    code:0,
+    code:1,
     msg:"输入的用户名或密码不正确"
 })
 Mock.mock('/Account/ListBank',[

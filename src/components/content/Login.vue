@@ -16,7 +16,7 @@
       </el-form>
       <div role="alert" class="el-alert el-alert--error" style="margin-bottom:22px" v-if="hasError">
         <i class="el-alert__icon el-icon-error"></i>
-        <div class="el-alert__content">
+        <div class="el-alert__content e-alert-content">
           <span class="el-alert__title">{{errorMsg}}</span>
         </div>
       </div>
