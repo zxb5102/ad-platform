@@ -55,7 +55,7 @@
             <div class="column">
               <div class="left">
                 <div class="header">
-                  <span>CPA （每行动成本）</span>
+                  <span>注册计费</span>
                 </div>
                 <span class="content">CPA （每行动成本，Cost Per Action）计价方式是指按广告投放实际效果，即按规定的要求和单价来推广，而不限广告投放量。CPA广告是网络中最常见的一种广告形式，当用户按规定要求完成这个cpa广告后，站长就会获得相应的收入。</span>
               </div>
@@ -68,7 +68,7 @@
             <div class="column">
               <div class="left">
                 <div class="header">
-                  <span>CPS(销售效果付费)</span>
+                  <span>充值提成</span>
                 </div>
                 <span class="content">CPS（销售效果付费，Cost per sale）：按照用户最终购买或者消费服务商联盟活动产品的数量或者金额的一定比例进行分成。这种方式最大化保证了广告商的利益，成本可控，当然如果站长同时有好的资源，这种合作方式也是很不错的。</span>
               </div>
